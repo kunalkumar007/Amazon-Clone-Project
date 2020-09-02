@@ -16,7 +16,7 @@ app.get('/api/products/:id', (req, res) => {
 	const product = data.products.find((x) => x._id === productId);
 	if(product){
 
-		res.send([product]);
+		res.send(product);
 	}
 	else{
 		res.status(404).json({msg:'Product Not Found!'})

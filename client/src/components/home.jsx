@@ -10,7 +10,7 @@ export default function Home(props) {
 
 	useEffect(() => {
 		dispatch(listProducts());
-	},[]);
+	}, []);
 
 	return (
 		<>

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 // import data from '../data';
 import { Link } from 'react-router-dom';
+import Select from 'react-select';
 import { useSelector, useDispatch } from 'react-redux';
 import { detailsProducts } from '../actions/productActions';
 
 export default function Product(props) {
-	const [qty, setqty] = useState(1);
+	const [qty, setqty] = useState(null);
 	const productDetails = useSelector((state) => state.productDetails);
 	const { products, loading, error } = productDetails;
 	const dispatch = useDispatch();
@@ -13,6 +14,18 @@ export default function Product(props) {
 	useEffect(() => {
 		dispatch(detailsProducts(props.match.params.id));
 	}, []);
+
+	const options = [
+		
+		{ value: '1', label: '1' },
+		{ value: '2', label: '2' },
+		{ value: '3', label: '3' },
+		{ value: '4', label: '4' },
+	];
+	
+	const handleAddToCart=()=>{
+		props.history.push(`/cart/${props.match.params.id}?qty=${qty.value}`)
+	}
 
 	return (
 		<div>
@@ -26,48 +39,43 @@ export default function Product(props) {
 			) : (
 				<>
 					{console.log(products)}
-					{products.map((item) => (
-						<div className="details" key={item._id}>
-							<div className="details-image">
-								<img src={item.image} alt="product pic" />
-							</div>
-							<div className="details-info">
-								<ul>
-									<li>
-										<h4>{item.name}</h4>
-									</li>
-									<li>
-										{item.rating} Stars ({item.numReviews} Reviews)
-									</li>
-									<li>
-										<b> {item.price} </b>
-									</li>
-									<li>
-										Description:
-										<div>{item.description}</div>
-									</li>
-								</ul>
-							</div>
-							<div className="details-action">
-								<ul>
-									<li>Price: $ {item.price}</li>
-									<li>Status:{item.status}</li>
-									<li>
-										Qty:{' '}
-										<select value={qty} onChange={(e) => setqty(e.target.value)}>
-											<option value="1">1</option>
-											<option value="2">2</option>
-											<option value="3">3</option>
-											<option value="4">4</option>
-										</select>
-									</li>
-									<li>
-										<button className="button primary">Add to Cart</button>
-									</li>
-								</ul>
-							</div>
+					{/* {products.map((item) => ( */}
+					<div className="details" key={products._id}>
+						<div className="details-image">
+							<img src={products.image} alt="product pic" />
 						</div>
-					))}
+						<div className="details-info">
+							<ul>
+								<li>
+									<h4>{products.name}</h4>
+								</li>
+								<li>
+									{products.rating} Stars ({products.numReviews} Reviews)
+								</li>
+								<li>
+									<b> {products.price} </b>
+								</li>
+								<li>
+									Description:
+									<div>{products.description}</div>
+								</li>
+							</ul>
+						</div>
+						<div className="details-action">
+							<ul>
+								<li>Price: $ {products.price}</li>
+								<li>Status:{products.status}</li>
+								<li>
+									Qty: <Select value={qty} onChange={(e) => setqty(e)} options={options} />
+								</li>
+								<li>
+									<button className="button primary" onClick={handleAddToCart} >Add to Cart</button>
+								</li>
+							</ul>
+						</div>
+					</div>
+					{console.log(qty)}
+					{/* ))} */}
 				</>
 			)}
 		</div>
